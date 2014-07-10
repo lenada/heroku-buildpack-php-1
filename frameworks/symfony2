@@ -44,6 +44,9 @@ case "$1" in
         chmod -R a+rw+s app/cache
         chown -R nobody:nogroup app/cache
 
+        chmod -R a+rw+s app/logs
+        chown -R nobody:nogroup app/logs
+        
         status "Inplace replacment of $CACHE_DIR to $APP_DIR"
         find $CACHE_DIR/app/cache/prod -type f -exec sed -i "s@$CACHE_DIR@$APP_DIR@g" {} \; | indent
         grep $CACHE_DIR/app/cache/prod -r . && error "Could find some '$CACHE_DIR' :/ "
