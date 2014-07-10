@@ -54,6 +54,8 @@ case "$1" in
         find $CACHE_DIR/app/cache/prod -type f -exec sed -i "s@$CACHE_DIR@$APP_DIR@g" {} \; | indent
         grep $CACHE_DIR/app/cache/prod -r . && error "Could find some '$CACHE_DIR' :/ "
 
+        php app/console oro:platform:update --force --env=prod | indent
+
         status "End"
         ;;
 esac
