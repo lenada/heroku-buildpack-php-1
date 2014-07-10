@@ -40,6 +40,11 @@ case "$1" in
         status "Warmuping cache"
         rm -rf app/cache/*
         php app/console cache:warmup --env=prod --no-debug | indent
+        php app/console oro:platform:update --force --env=prod | indent
+        
+        status "Inplace replacment of $CACHE_DIR to $APP_DIR"
+        find $CACHE_DIR/app/cache/prod -type f -exec sed -i "s@$CACHE_DIR@$APP_DIR@g" {} \; | indent
+        grep $CACHE_DIR/app/cache/prod -r . && error "Could find some '$CACHE_DIR' :/ "
 
         status "fixing shit"
 
@@ -49,12 +54,6 @@ case "$1" in
         touch app/logs/prod.log
         chmod -R a+rw+s app/logs
         chown -R nobody:nogroup app/logs
-
-        php app/console oro:platform:update --force --env=prod | indent
-        
-        status "Inplace replacment of $CACHE_DIR to $APP_DIR"
-        find $CACHE_DIR/app/cache/prod -type f -exec sed -i "s@$CACHE_DIR@$APP_DIR@g" {} \; | indent
-        grep $CACHE_DIR/app/cache/prod -r . && error "Could find some '$CACHE_DIR' :/ "
 
         chmod -R a+rw+s web/uploads/
         chmod -R a+rw+s web/bundles/
