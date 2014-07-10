@@ -41,6 +41,8 @@ case "$1" in
         rm -rf app/cache/*
         php app/console cache:warmup --env=prod --no-debug | indent
 
+        chmod -R a+rw+s app/cache
+        chown -R nobody:nogroup app/cache
 
         status "Inplace replacment of $CACHE_DIR to $APP_DIR"
         find $CACHE_DIR/app/cache/prod -type f -exec sed -i "s@$CACHE_DIR@$APP_DIR@g" {} \; | indent
