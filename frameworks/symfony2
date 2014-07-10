@@ -41,10 +41,12 @@ case "$1" in
         rm -rf app/cache/*
         php app/console cache:warmup --env=prod --no-debug | indent
 
+        status "fixing shit"
+
         chmod -R a+rw+s app/cache
         chown -R nobody:nogroup app/cache
 
-        chmod touch app/logs/prod.log
+        touch app/logs/prod.log
         chmod -R a+rw+s app/logs
         chown -R nobody:nogroup app/logs
         
